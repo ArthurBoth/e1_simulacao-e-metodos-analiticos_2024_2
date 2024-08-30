@@ -47,6 +47,6 @@ public class RNG {
     }
 
     public boolean stop() {
-        return (iteration < stopCount);
+        return (iteration >= stopCount);
     }
 }

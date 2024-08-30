@@ -33,9 +33,14 @@ public class QuqueSimulation {
     }
 
     public void run(int stopInCount, double firstArrival) {
-        rng.setStop(stopInCount);
-        scheduler.add(firstArrival, EventType.ARRIVAL); // Primeira chegada predeterminada
-        runLoop();
+        if (firstArrival > 0) {
+            rng.setStop(stopInCount);
+            scheduler.add(firstArrival, EventType.ARRIVAL); // Primeira chegada predeterminada
+            runLoop();
+        }
+        else {
+            run(stopInCount);
+        }
     }
 
     private void runLoop() {
@@ -85,9 +90,9 @@ public class QuqueSimulation {
     public DataWrapper getData() {
         DataWrapper data = new DataWrapper();
 
-        data.endTime = globalTime;
-        data.lossCount = this.lossCount;
-        data.queueTimeStatus = timeStatus;
+        data.setEndTime(globalTime);
+        data.setLossCount(lossCount);
+        data.setQueueTime(timeStatus);
 
         return data;
     }

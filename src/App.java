@@ -8,11 +8,9 @@ public class App {
         QuqueSimulation queue = new QuqueSimulation();
         DataWrapper data;
 
-        queue.run(Configs.ITERATIONS);
+        queue.run(Configs.ITERATIONS, Configs.FIRST_ARRIVAL);
         data = queue.getData();
-        
-        for(int i = 0; i < data.queueTimeStatus.length; i++) {
-            System.out.printf("%d: %f (%f %%)%n", i, data.queueTimeStatus[i], (data.queueTimeStatus[i]/data.endTime));
-        }
+
+        data.printInfo();
     }
 }
