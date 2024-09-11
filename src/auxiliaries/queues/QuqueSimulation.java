@@ -1,99 +1,76 @@
 package auxiliaries.queues;
 
-import static auxiliaries.Configs.QUEUE_CAPACITY;
-import static auxiliaries.Configs.QUEUE_SERVERS;
-
-import auxiliaries.Configs;
-import auxiliaries.RNG;
-
 public class QuqueSimulation {
+    private final int serverCount;
+    private final int capacity;
 
-    private final RNG rng;
-    private final Scheduler scheduler;
-
-    private double globalTime;
     private int currentCount;
     private int lossCount;
     private double[] timeStatus;
     
-    public QuqueSimulation() {
-        rng = new RNG();
-        scheduler = new Scheduler(rng);
+    public final double minArrival;
+    public final double maxArrival;
+    public final double minService;
+    public final double maxService;
+    
+    public QuqueSimulation(int serverCount, int capacity, double minArrival, double maxArrival, double minService, double maxService) {
+        this.serverCount = serverCount;
+        this.capacity    = capacity;
+        this.minArrival  = minArrival;
+        this.maxArrival  = maxArrival;
+        this.minService  = minService;
+        this.maxService  = maxService;
 
-        globalTime = 0;
         currentCount = 0;
-        lossCount = 0;
-        timeStatus = new double[QUEUE_CAPACITY + 1]; // +1 pra incluir o '0'
+        lossCount    = 0;
+        timeStatus   = new double[capacity + 1]; // +1 pra incluir o '0'
+    }
+    
+    public int getStatus() {
+        return currentCount;
     }
 
-    public void run(int stopInCount) {
-        scheduler.add(rng.nextRandom(Configs.MIN_TIME_TO_ARRIVE, Configs.MAX_TIME_TO_ARRIVE), EventType.ARRIVAL); // Primeira chegada aleatória
-        rng.setStop(stopInCount);
-        runLoop();
+    public int getCapacity() {
+        return capacity;
+    } 
+
+    public int getServers() {
+        return serverCount;
     }
 
-    public void run(int stopInCount, double firstArrival) {
-        if (firstArrival > 0) {
-            rng.setStop(stopInCount);
-            scheduler.add(firstArrival, EventType.ARRIVAL); // Primeira chegada predeterminada
-            runLoop();
-        }
-        else {
-            run(stopInCount);
-        }
+    public int getLoss() {
+        return lossCount;
     }
 
-    private void runLoop() {
-        while (!rng.stop()) {
-            Event e = scheduler.Next();
-
-            if (e.eventType == EventType.ARRIVAL) {
-                arrival(e);
-            }
-            else if (e.eventType == EventType.LEAVE) {
-                leave(e);
-            }
-        }
+    public void clientLoss() {
+        lossCount++;
     }
 
-    private void arrival(Event e) {
-        calcTime(e);
-
-        if (currentCount < QUEUE_CAPACITY) {
-            currentCount++;
-            if (currentCount <= QUEUE_SERVERS) {
-                scheduler.add(globalTime, EventType.LEAVE); // Agenda uma saída
-            }
-        } 
-        else {
-            lossCount++;
-        }
-
-        scheduler.add(globalTime, EventType.ARRIVAL);
+    public void clientIn() {
+        currentCount++;
     }
 
-    private void leave(Event e) {
-        calcTime(e);
-
+    public void clientOut() {
         currentCount--;
-        if (currentCount >= QUEUE_SERVERS) {
-            scheduler.add(globalTime, EventType.LEAVE);
-        }
     }
 
-    private void calcTime(Event e) {
-        double now = e.scheduledFor;
-        timeStatus[currentCount] = (timeStatus[currentCount] + (now - globalTime));
-        globalTime = now;
+    public void calcTime(double timestamp) {
+      timeStatus[currentCount] += timestamp;
     }
 
-    public DataWrapper getData() {
-        DataWrapper data = new DataWrapper();
+    public EventType getArrivalEvent() {
+        EventType eventType = EventType.ARRIVAL;
+        eventType.setMintime(minArrival);
+        eventType.setMaxtime(maxArrival);
 
-        data.setEndTime(globalTime);
-        data.setLossCount(lossCount);
-        data.setQueueTime(timeStatus);
+        return eventType;
+    }
 
-        return data;
+    public EventType getLeaveEvent() {
+        EventType eventType = EventType.LEAVE;
+        eventType.setMintime(minService);
+        eventType.setMaxtime(maxService);
+
+        return eventType;
     }
 }

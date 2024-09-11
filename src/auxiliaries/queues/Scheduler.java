@@ -20,8 +20,14 @@ public class Scheduler {
         );
     }
 
-    public Event Next() {
+    public Event next() {
         return eventBuffer.poll();
+    }
+
+    public void add(double minArrival, double maxArrival, EventType eventType) {
+        eventType.setMintime(minArrival);
+        eventType.setMaxtime(maxArrival);
+        add(rng.nextRandom(minArrival, maxArrival), eventType);
     }
 
     public void add(double globalTime, EventType eventType) {
@@ -33,6 +39,10 @@ public class Scheduler {
 
     private double getOccurance(EventType eventType) {
         // U(a,b) = a + [(b-a)*x]
-        return (eventType.minTime + ((eventType.maxTime - eventType.minTime) * rng.nextRandom()));
+        return (eventType.minTime() + ((eventType.maxTime() - eventType.minTime()) * rng.nextRandom()));
+    }
+
+    public boolean stop() {
+        return rng.stop();
     }
 }
