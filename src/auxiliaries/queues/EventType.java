@@ -1,18 +1,27 @@
 package auxiliaries.queues;
 
-import static auxiliaries.Configs.MIN_TIME_TO_ARRIVE;
-import static auxiliaries.Configs.MAX_TIME_TO_ARRIVE;
-import static auxiliaries.Configs.MIN_TIME_TO_LEAVE;
-import static auxiliaries.Configs.MAX_TIME_TO_LEAVE;
-
 public enum EventType {
-    ARRIVAL(MIN_TIME_TO_ARRIVE, MAX_TIME_TO_ARRIVE), LEAVE(MIN_TIME_TO_LEAVE, MAX_TIME_TO_LEAVE);
+    ARRIVAL, LEAVE, SWITCH;
 
-    public final double minTime;
-    public final double maxTime;
+    private double minTime;
+    private double maxTime;
 
-    private EventType(double minTime, double maxTime) {
+    private EventType() {
+    }
+
+    public void setMintime(double minTime) {
         this.minTime = minTime;
+    }
+
+    public void setMaxtime(double maxTime) {
         this.maxTime = maxTime;
+    }
+
+    public double minTime() {
+        return minTime;
+    }
+
+    public double maxTime() {
+        return maxTime;
     }
 }
