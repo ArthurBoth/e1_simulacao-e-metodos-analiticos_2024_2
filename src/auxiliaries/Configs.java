@@ -11,7 +11,7 @@ public abstract class Configs {
     public static final double INCREMENT    = 14423.2563217511;  
     public static final double MODULE       = 16651.8647227172;  
 
-    // constantes para impressão na tela
+    // Constantes para impressão na tela
     public static final String ANSI_RESET  = "\u001B[0m";
     public static final String ANSI_YELLOW = "\u001B[33m";
 

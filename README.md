@@ -1,18 +1,14 @@
-## Getting Started
+<h1> Queue Simulation </h1>
+### Authors
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+| [<img loading="lazy" src="https://avatars.githubusercontent.com/u/112208993?v=4" width=115><br><sub>Arthur Both</sub>](https://github.com/ArthurBoth) | [<img loading="lazy" src="https://avatars.githubusercontent.com/u/111612705?v=4" width=115><br><sub>Vitor Jacom</sub>](https://github.com/VitorJacom) | [<img loading="lazy" src="https://avatars.githubusercontent.com/u/142272036?v=4" width=115><br><sub>HenriqueDaSilvaJuchem</sub>](https://github.com/HenriqueDaSilvaJuchem) |
+|---|---|---|
 
-## Folder Structure
+<hr>
 
-The workspace contains two folders by default, where:
+This is the README document, here will be showed some informations about the project.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+### Introduction
+This is an assignment made for our *Simulation and analytical methods* class.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+### Usage instructions

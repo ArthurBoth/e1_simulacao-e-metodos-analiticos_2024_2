@@ -1,5 +1,7 @@
 package auxiliaries.queues;
 
+import java.util.ArrayList;
+
 public class QueueManager {
     public static final double FIRST_ARRIVAL      = 0;
     public static final double MIN_TIME_TO_SWITCH = 0;
@@ -8,13 +10,19 @@ public class QueueManager {
     private final Scheduler scheduler;
 
     private double globalTime;
+    private ArrayList<QuqueSimulation> queues;
     private QuqueSimulation queue1;
     private QuqueSimulation queue2;
     
     public QueueManager(Scheduler scheduler) {
         this.scheduler = scheduler;
+        queues = new ArrayList<>();
         queue1 = new QuqueSimulation(0, 0, 0, 0, 0, 0);
         queue2 = new QuqueSimulation(0, 0, 0, 0, 0, 0);
+    }
+
+    public void newQueue(int serverCount, int capacity, double minArrival, double maxArrival, double minService, double maxService) {
+        queues.add(new QuqueSimulation(serverCount, capacity, minArrival, maxArrival, minService, maxService));
     }
 
     public void run() {
