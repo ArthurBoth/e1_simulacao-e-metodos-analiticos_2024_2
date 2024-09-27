@@ -1,7 +1,6 @@
 package auxiliaries.queues;
 
 import java.util.PriorityQueue;
-import java.util.Comparator;
 
 import auxiliaries.RNG;
 
@@ -12,11 +11,7 @@ public class Scheduler {
     public Scheduler(RNG rng) {
         this.rng = rng;
         eventBuffer = new PriorityQueue<>(
-            new Comparator<Event>() {
-                public int compare(Event e1, Event e2){
-                    return ((int) e1.scheduledFor - (int) e2.scheduledFor);
-                }
-            }
+            (e1, e2) -> ((int) e1.scheduledFor - (int) e2.scheduledFor)
         );
     }
 
@@ -34,6 +29,11 @@ public class Scheduler {
         double eventOccurance = getOccurance(eventType);
         Event e = new Event(eventType, (globalTime + eventOccurance));
 
+        eventBuffer.add(e);
+    }
+
+    public void firstArrival(double arrivalTime) {
+        Event e = new Event(EventType.ARRIVAL, arrivalTime);
         eventBuffer.add(e);
     }
 

@@ -1,23 +1,40 @@
 package auxiliaries.queues;
 
+import java.util.ArrayList;
+
 public class QueueManager {
-    public static final double FIRST_ARRIVAL      = 0;
-    public static final double MIN_TIME_TO_SWITCH = 0;
-    public static final double MAX_TIME_TO_SWITCH = 0;
+    public static final double FIRST_ARRIVAL      = 1.5;
+    public static final double MIN_TIME_TO_ARRIVE = 1;
+    public static final double MAX_TIME_TO_ARRIVE = 4;
+    public static final double MIN_TIME_TO_SWITCH = 3;
+    public static final double MAX_TIME_TO_SWITCH = 4;
+    public static final double MIN_TIME_TO_LEAVE  = 2;
+    public static final double MAX_TIME_TO_LEAVE  = 3;
 
     private final Scheduler scheduler;
 
     private double globalTime;
+    private ArrayList<QuqueSimulation> queues;
     private QuqueSimulation queue1;
     private QuqueSimulation queue2;
     
     public QueueManager(Scheduler scheduler) {
         this.scheduler = scheduler;
-        queue1 = new QuqueSimulation(0, 0, 0, 0, 0, 0);
-        queue2 = new QuqueSimulation(0, 0, 0, 0, 0, 0);
+        queues = new ArrayList<>();
+        queue1 = new QuqueSimulation(2, 3,
+                                     MIN_TIME_TO_ARRIVE, MAX_TIME_TO_ARRIVE,
+                                     MIN_TIME_TO_SWITCH, MAX_TIME_TO_SWITCH);
+        queue2 = new QuqueSimulation(1, 5,
+                                     0, 0,
+                                     MIN_TIME_TO_LEAVE, MAX_TIME_TO_LEAVE);
     }
 
-    public void run() {
+    public void newQueue(int serverCount, int capacity, double minArrival, double maxArrival, double minService, double maxService) {
+        queues.add(new QuqueSimulation(serverCount, capacity, minArrival, maxArrival, minService, maxService));
+    }
+
+    public void run(double firstArrival) {
+        scheduler.firstArrival(firstArrival);
         while (!scheduler.stop()) {
             Event e = scheduler.next();
 
@@ -34,6 +51,12 @@ public class QueueManager {
                 default:
             }
         }
+        printData();
+    }
+
+    private void printData() {
+        queue1.getData().printInfo("Fila 1", globalTime);
+        queue2.getData().printInfo("Fila 2", globalTime, true);
     }
 
     private void calcTime(Event e) {

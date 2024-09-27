@@ -1,7 +1,6 @@
 import auxiliaries.RNG;
 import auxiliaries.queues.Scheduler;
 import auxiliaries.queues.QueueManager;
-import auxiliaries.queues.DataWrapper;
 
 import auxiliaries.Configs;
 
@@ -13,11 +12,6 @@ public class App {
         Scheduler scheduler = new Scheduler(rng);
         QueueManager manager = new QueueManager(scheduler);
         
-        DataWrapper data;
-
-        queue.run(Configs.ITERATIONS, Configs.FIRST_ARRIVAL);
-        data = queue.getData();
-
-        data.printInfo();
+        manager.run(Configs.FIRST_ARRIVAL);
     }
 }

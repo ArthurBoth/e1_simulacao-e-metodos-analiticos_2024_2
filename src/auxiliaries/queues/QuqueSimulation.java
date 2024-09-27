@@ -73,4 +73,11 @@ public class QuqueSimulation {
 
         return eventType;
     }
+
+    public DataWrapper getData() {
+        DataWrapper data = new DataWrapper();
+        data.setQueueTime(timeStatus);
+        data.setLossCount(lossCount);
+        return data;
+    }
 }
