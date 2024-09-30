@@ -11,7 +11,7 @@ public class Scheduler {
     public Scheduler(RNG rng) {
         this.rng = rng;
         eventBuffer = new PriorityQueue<>(
-            (e1, e2) -> ((int) e1.scheduledFor - (int) e2.scheduledFor)
+            (e1, e2) -> ((int) e1.SCHEDULED_FOR - (int) e2.SCHEDULED_FOR)
         );
     }
 
@@ -20,8 +20,8 @@ public class Scheduler {
     }
 
     public void add(double minArrival, double maxArrival, EventType eventType) {
-        eventType.setMintime(minArrival);
-        eventType.setMaxtime(maxArrival);
+        eventType.setMinTime(minArrival);
+        eventType.setMaxTime(maxArrival);
         add(rng.nextRandom(minArrival, maxArrival), eventType);
     }
 
@@ -33,7 +33,11 @@ public class Scheduler {
     }
 
     public void firstArrival(double arrivalTime) {
-        Event e = new Event(EventType.ARRIVAL, arrivalTime);
+        EventType type = EventType.ARRIVAL;
+        type.setFromQueue(0);
+        type.setToQueue(1);
+
+        Event e = new Event(type, arrivalTime);
         eventBuffer.add(e);
     }
 
@@ -44,5 +48,13 @@ public class Scheduler {
 
     public boolean stop() {
         return rng.stop();
+    }
+
+    public double getRandom() {
+        return rng.nextRandom(0, 1);
+    }
+
+    public boolean isEmpty() {
+        return eventBuffer.isEmpty();
     }
 }
