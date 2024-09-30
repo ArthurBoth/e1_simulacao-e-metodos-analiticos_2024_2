@@ -12,6 +12,18 @@ public class App {
         Scheduler scheduler = new Scheduler(rng);
         QueueManager manager = new QueueManager(scheduler);
         
+        manager.newQueue(1, 0, 2, 0, 1, 2);
+        manager.newQueue(2, 5, 0, 0, 4, 8);
+        manager.newQueue(2, 10, 0, 0, 5, 15);
+
+        manager.linkQueues(1, 2, 0.8);
+        manager.linkQueues(1, 3, 0.2);
+        manager.linkQueues(2, 1, 0.3);
+        manager.linkQueues(2, 0, 0.2);
+        manager.linkQueues(2, 2, 0.5);
+        manager.linkQueues(3, 3, 0.7);
+        manager.linkQueues(3, 3, 0.3);
+
         manager.run(Configs.FIRST_ARRIVAL);
     }
 }

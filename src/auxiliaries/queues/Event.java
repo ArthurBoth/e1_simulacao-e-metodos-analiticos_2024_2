@@ -1,11 +1,11 @@
 package auxiliaries.queues;
 
 public class Event {
-    public final EventType eventType;
-    public final double scheduledFor;
+    public final EventType EVENT_TYPE;
+    public final double SCHEDULED_FOR;
 
     public Event(EventType eventType, double scheduledFor) {
-        this.eventType = eventType;
-        this.scheduledFor = scheduledFor;
+        EVENT_TYPE      = eventType;
+        SCHEDULED_FOR   = scheduledFor;
     }
 }

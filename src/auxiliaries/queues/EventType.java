@@ -5,16 +5,26 @@ public enum EventType {
 
     private double minTime;
     private double maxTime;
+    private int fromQueue;
+    private int toQueue;
 
     private EventType() {
     }
 
-    public void setMintime(double minTime) {
+    public void setMinTime(double minTime) {
         this.minTime = minTime;
     }
 
-    public void setMaxtime(double maxTime) {
+    public void setMaxTime(double maxTime) {
         this.maxTime = maxTime;
+    }
+
+    public void setFromQueue(int fromQueue) {
+        this.fromQueue = fromQueue;
+    }
+
+    public void setToQueue(int toQueue) {
+        this.toQueue = toQueue;
     }
 
     public double minTime() {
@@ -23,5 +33,13 @@ public enum EventType {
 
     public double maxTime() {
         return maxTime;
+    }
+
+    public int fromQueue() {
+        return fromQueue;
+    }
+
+    public int toQueue() {
+        return toQueue;
     }
 }
