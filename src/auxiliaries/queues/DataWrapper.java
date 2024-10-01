@@ -1,13 +1,12 @@
 package auxiliaries.queues;
 
-import static auxiliaries.Configs.ANSI_GREEN;
-import static auxiliaries.Configs.ANSI_YELLOW;
-import static auxiliaries.Configs.ANSI_RESET;
+import auxiliaries.io.ConsoleLogger;
+import auxiliaries.io.FileIO;
 
 public class DataWrapper {
     
-    private double[] queueTimeStatus;    // status de quanto tempo haviam aquele numero de clientes na fila
-    private int lossCount;               // quantos clientes não entraram na fila porque ela estava cheia
+    private double[] queueTimeStatus; // Sum of how long the queue had [index] clients 
+    private int lossCount;            // how many clients were lost due to not having queue space left
 
     public DataWrapper() {
         lossCount        = -1;
@@ -28,27 +27,57 @@ public class DataWrapper {
     
     public void printInfo(String header, double endTime, boolean printEndTime) {
         if (validNumbers(endTime)) {
-            System.out.printf("%s%s%s%n", ANSI_GREEN, header, ANSI_RESET);
+            ConsoleLogger.logGreen(header);
 
-            System.out.printf("%sDistribuição de probabilidades%s%n", ANSI_YELLOW, ANSI_RESET);
+            ConsoleLogger.logYellow("Probability distribution");
             for(int i = 0; i < queueTimeStatus.length; i++) {
-                    System.out.printf("%d: %.04f %%%n", i, (queueTimeStatus[i]/endTime));
-                }
+                ConsoleLogger.logWhite(String.format("%d: %.04f %%", i, (queueTimeStatus[i]/endTime)));
+            }
     
-            System.out.printf("%n%sTempos acumulados%s%n", ANSI_YELLOW, ANSI_RESET);
+            ConsoleLogger.logYellow("Grupped times");
             for(int i = 0; i < queueTimeStatus.length; i++) {
-                    System.out.printf("%d: %.04f%n", i, queueTimeStatus[i]);
-                }
-                
-            System.out.printf("%n%sNúmero de perda de clientes%s%n", ANSI_YELLOW, ANSI_RESET);
-            System.out.printf("%d%n", lossCount);
+                ConsoleLogger.logWhite(String.format("%d: %.04f", i, queueTimeStatus[i]));
+            }
+            
+            ConsoleLogger.logYellow("Clients lost");
+            ConsoleLogger.logWhite(String.format("%d%n", lossCount));
     
             if (printEndTime) {
-                System.out.printf("%n%sTempo global da simulação%s%n", ANSI_YELLOW, ANSI_RESET);
-                System.out.printf("%.04f%n%n", endTime);
+                ConsoleLogger.logYellow("Total simulation time");
+                ConsoleLogger.logWhite(String.format("%.04f%n%n", endTime));
             } else {
                 System.out.println();
             }
+        }
+    }
+
+    public void writeInfo(String header, double endTime, boolean writeEndTime) {
+        StringBuilder builder;
+        if (validNumbers(endTime)) {
+            builder = new StringBuilder(String.format("%s%n", header));
+            
+            builder.append(String.format("Probability distribution%n"));
+            for(int i = 0; i < queueTimeStatus.length; i++) {
+                builder.append(String.format("%d: %.04f %%%n", i, (queueTimeStatus[i]/endTime)));
+            }
+    
+            builder.append(String.format("Grupped times%n"));
+            for(int i = 0; i < queueTimeStatus.length; i++) {
+                builder.append(String.format("%d: %.04f%n", i, queueTimeStatus[i]));
+            }
+            
+            builder.append(String.format("Clients lost%n"));
+            builder.append(String.format("%d%n", lossCount));
+
+            if (writeEndTime) {
+                builder.append(String.format("Total simulation time%n"));
+                builder.append(String.format("%.04f%n%n", endTime));
+            }
+            else {
+                builder.append(System.lineSeparator());
+            }
+
+            FileIO.writeLine("_Output File_.txt", builder.toString());
         }
     }
     

@@ -2,12 +2,13 @@ import auxiliaries.RNG;
 import auxiliaries.queues.Scheduler;
 import auxiliaries.queues.QueueManager;
 
-import auxiliaries.Configs;
-
 public class App {
+    // Simulation configs
+    public static final int ITERATIONS       = 100000;
+    public static final double FIRST_ARRIVAL = 2;
     public static void main(String[] args) {
         RNG rng = new RNG();
-        rng.setStop(Configs.ITERATIONS);
+        rng.setStop(ITERATIONS);
 
         Scheduler scheduler = new Scheduler(rng);
         QueueManager manager = new QueueManager(scheduler);
@@ -24,6 +25,6 @@ public class App {
         manager.linkQueues(3, 3, 0.7);
         manager.linkQueues(3, 3, 0.3);
 
-        manager.run(Configs.FIRST_ARRIVAL);
+        manager.run(FIRST_ARRIVAL, true);
     }
 }

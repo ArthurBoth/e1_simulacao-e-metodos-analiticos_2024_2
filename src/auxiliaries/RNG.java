@@ -1,10 +1,5 @@
 package auxiliaries;
 
-import static auxiliaries.Configs.SEED;
-import static auxiliaries.Configs.MULTIPLIER;
-import static auxiliaries.Configs.INCREMENT;
-import static auxiliaries.Configs.MODULE;
-
 public class RNG {
 
     /*
@@ -13,6 +8,11 @@ public class RNG {
      * 0 <= c < M
      * 0 <= X < M
      */
+
+    public static final double SEED         = 3.1415926535;     
+    public static final int MULTIPLIER      = 157907;            
+    public static final double INCREMENT    = 14423.2563217511;  
+    public static final double MODULE       = 16651.8647227172;  
 
     private double previous;
 
