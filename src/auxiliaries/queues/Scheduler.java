@@ -11,7 +11,7 @@ public class Scheduler {
     public Scheduler(RNG rng) {
         this.rng = rng;
         eventBuffer = new PriorityQueue<>(
-            (e1, e2) -> ((int) e1.SCHEDULED_FOR - (int) e2.SCHEDULED_FOR)
+            (e1, e2) -> ((int) ((e1.scheduledFor() - e2.scheduledFor()) * 10000))
         );
     }
 
@@ -19,31 +19,31 @@ public class Scheduler {
         return eventBuffer.poll();
     }
 
-    public void add(double minArrival, double maxArrival, EventType eventType) {
-        eventType.setMinTime(minArrival);
-        eventType.setMaxTime(maxArrival);
-        add(rng.nextRandom(minArrival, maxArrival), eventType);
+    public void add(double minArrival, double maxArrival, Event event) {
+        event.setMinTime(minArrival);
+        event.setMaxTime(maxArrival);
+        add(rng.nextRandom(minArrival, maxArrival), event);
     }
 
-    public void add(double globalTime, EventType eventType) {
-        double eventOccurance = getOccurance(eventType);
-        Event e = new Event(eventType, (globalTime + eventOccurance));
+    public void add(double globalTime, Event event) {
+        double eventOccurance = getOccurance(event);
+        event.setScheduledFor(globalTime + eventOccurance);
 
-        eventBuffer.add(e);
+        eventBuffer.add(event);
     }
 
     public void firstArrival(double arrivalTime) {
-        EventType type = EventType.ARRIVAL;
-        type.setFromQueue(0);
-        type.setToQueue(1);
+        Event event = new Event(EventType.ARRIVAL);
+        event.setFromQueue(0);
+        event.setToQueue(1);
 
-        Event e = new Event(type, arrivalTime);
-        eventBuffer.add(e);
+        event.setScheduledFor(arrivalTime);
+        eventBuffer.add(event);
     }
 
-    private double getOccurance(EventType eventType) {
+    private double getOccurance(Event event) {
         // U(a,b) = a + [(b-a)*x]
-        return (eventType.minTime() + ((eventType.maxTime() - eventType.minTime()) * rng.nextRandom()));
+        return (event.minTime() + ((event.maxTime() - event.minTime()) * rng.nextRandom()));
     }
 
     public boolean stop() {

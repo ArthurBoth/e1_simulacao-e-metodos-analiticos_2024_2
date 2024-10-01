@@ -62,20 +62,20 @@ public class QueueSimulation {
       timeStatus[currentCount] += timestamp;
     }
 
-    public EventType getArrivalEvent() {
-        EventType eventType = EventType.ARRIVAL;
-        eventType.setMinTime(MIN_ARRIVAL);
-        eventType.setMaxTime(MAX_ARRIVAL);
+    public Event getArrivalEvent() {
+        Event event = new Event(EventType.ARRIVAL);
+        event.setMinTime(MIN_ARRIVAL);
+        event.setMaxTime(MAX_ARRIVAL);
 
-        return eventType;
+        return event;
     }
 
-    public EventType getLeaveEvent() {
-        EventType eventType = EventType.LEAVE;
-        eventType.setMinTime(MIN_SERVICE);
-        eventType.setMaxTime(MAX_SERVICE);
+    public Event getLeaveEvent() {
+        Event event = new Event(EventType.LEAVE);
+        event.setMinTime(MIN_SERVICE);
+        event.setMaxTime(MAX_SERVICE);
 
-        return eventType;
+        return event;
     }
 
     public DataWrapper getData() {
@@ -86,10 +86,11 @@ public class QueueSimulation {
     }
 
     public void newLink(int index, double chance) {
+        System.out.println(index + "\n");
         /* Para considerar o input como uma porcentagem absoluta,
-           então somar às chances que já existem pra processamento 
-           isto também garante que a fila esteja em ordem crescente */
-        for (QueueLink l : links) {
+           então somar às chances que já existem pra processamento */
+        if (links.size() > 0) {
+            QueueLink l = links.get(links.size() - 1);
             chance += l.CHANCE;
         }
 

@@ -3,7 +3,7 @@ package auxiliaries;
 public abstract class Configs {
     // Confgurações de simulação
     public static final int ITERATIONS       = 100000;
-    public static final double FIRST_ARRIVAL = 45;
+    public static final double FIRST_ARRIVAL = 2;
 
     // Configurações do gerador de números pseudoaleatórios
     public static final double SEED         = 3.1415926535;     

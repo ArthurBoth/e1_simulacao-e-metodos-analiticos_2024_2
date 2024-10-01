@@ -15,7 +15,12 @@ public class QueueManager {
     }
 
     public void newQueue(int serverCount, int capacity, double minArrival, double maxArrival, double minService, double maxService) {
-        queues.add(new QueueSimulation(serverCount, capacity, minArrival, maxArrival, minService, maxService));
+        if (capacity <= 0) {
+            queues.add(new LimitlessQueue(serverCount, minArrival, maxArrival, minService, maxService));
+        }
+        else {
+            queues.add(new QueueSimulation(serverCount, capacity, minArrival, maxArrival, minService, maxService));
+        }
     }
 
     public void linkQueues(int source, int target, double chance) {
@@ -55,7 +60,7 @@ public class QueueManager {
     }
 
     private void calcTime(Event e) {
-        double now = e.SCHEDULED_FOR;
+        double now = e.scheduledFor();
         for (QueueSimulation q : queues) {
             if (q == null) continue;
             q.calcTime(now - globalTime);
@@ -63,11 +68,11 @@ public class QueueManager {
         globalTime = now;
     }
 
-    private EventType setIndexforEvent(Event e, QueueSimulation queue) {
+    private Event getRandomEvent(QueueSimulation queue) {
         ArrayList<QueueLink> links = queue.getLinks();
         double random = scheduler.getRandom();
         int index = 0;
-        EventType eventType;
+        Event event;
 
         for (QueueLink l : links) {
             if (random < l.CHANCE) {
@@ -77,75 +82,91 @@ public class QueueManager {
         }
 
         if (index == 0) {
-            eventType = EventType.LEAVE;
+            event = new Event(EventType.LEAVE);
         }
         else { 
-            eventType = EventType.SWITCH;
+            event = new Event(EventType.SWITCH);
         }
 
-        eventType.setMinTime(queue.MIN_SERVICE);
-        eventType.setMaxTime(queue.MAX_SERVICE);
-        eventType.setFromQueue(queues.indexOf(queue));
-        eventType.setToQueue(index);
+        event.setMinTime(queue.MIN_SERVICE);
+        event.setMaxTime(queue.MAX_SERVICE);
+        event.setFromQueue(queues.indexOf(queue));
+        event.setToQueue(index);
 
-        return eventType;
+        return event;
     }
 
     private void arrival(Event e) {
+        QueueSimulation q;
+        Event event;
+
+        int index = e.toQueue();
         calcTime(e);
-        int index = e.EVENT_TYPE.toQueue();
 
-        if (index < 1) return; // index == 0 -> Não entra na fila
+        q = queues.get(index);
 
-        if (queues.get(index).getStatus() < queues.get(index).getCapacity()) {
-            queues.get(index).clientIn();
+        if (q.getStatus() < q.getCapacity()) {
+            q.clientIn();
         }
-        if (queues.get(index).getStatus() <= queues.get(index).getServers()) {
-            EventType eventType = setIndexforEvent(e, queues.get(index));
+        if (q.getStatus() <= q.getServers()) {
+            event = getRandomEvent(q);
 
-            scheduler.add(globalTime, eventType);
+            scheduler.add(globalTime, event);
         } else {
-            queues.get(index).clientLoss();
+            q.clientLoss();
         }
 
-        scheduler.add(globalTime, queues.get(index).getArrivalEvent());
+        event = q.getArrivalEvent();
+        event.setToQueue(1);
+
+        scheduler.add(globalTime, event);
     }
 
     private void leave(Event e) {
+        QueueSimulation q;
+        Event event;
+
+        int index = e.fromQueue();
         calcTime(e);
-        int index = e.EVENT_TYPE.toQueue();
+        
+        q = queues.get(index);
 
-        if (index < 1) return; // index == 0 -> Sai da fila
+        q.clientOut();
+        if (q.getStatus() >= q.getServers()) {
+            event = q.getLeaveEvent();
+            event.setFromQueue(index);
 
-        queues.get(index).clientOut();
-        if (queues.get(index).getStatus() >= queues.get(index).getServers()) {
-            scheduler.add(globalTime, queues.get(index).getLeaveEvent());
+            scheduler.add(globalTime, event);
         }
     }
 
     private void switchQueues(Event e) {
+        QueueSimulation q1, q2;
+        Event event;
+
+        int index1 = e.fromQueue();
+        int index2 = e.toQueue();
         calcTime(e);
-        int index1 = e.EVENT_TYPE.fromQueue();
-        int index2 = e.EVENT_TYPE.toQueue();
 
-        if (index1 < 0) return; // index == 0 -> Sai da fila
+        q1 = queues.get(index1);
+        q2 = queues.get(index2);
         
-        queues.get(index1).clientOut();
-        if (queues.get(index1).getStatus() >= queues.get(index1).getServers()) {
-            EventType eventType = setIndexforEvent(e, queues.get(index1));
+        q1.clientOut();
+        if (q1.getStatus() >= q1.getServers()) {
+            event = getRandomEvent(q1);
 
-            scheduler.add(globalTime, eventType);
+            scheduler.add(globalTime, event);
         }
-        
-        if (index2 < 1) return; // index == 0 -> Sai da fila
 
-        if (queues.get(index2).getStatus() < queues.get(index2).getCapacity()) {
-            queues.get(index2).clientIn();
-            if (queues.get(index2).getStatus() <= queues.get(index2).getServers()) {
-                scheduler.add(globalTime, queues.get(index2).getLeaveEvent());
+        if (q2.getStatus() < q2.getCapacity()) {
+            q2.clientIn();
+            if (q2.getStatus() <= q2.getServers()) {
+                event = getRandomEvent(q2);
+    
+                scheduler.add(globalTime, event);
             }
         } else {
-            queues.get(index2).clientLoss();
+            q2.clientLoss();
         }
     }
 }
