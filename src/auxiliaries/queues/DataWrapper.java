@@ -30,21 +30,21 @@ public class DataWrapper {
         if (validNumbers(endTime)) {
             System.out.printf("%s%s%s%n", ANSI_GREEN, header, ANSI_RESET);
 
-            System.out.printf("%sDistribuição de probabilidades%s%n", ANSI_YELLOW, ANSI_RESET);
+            System.out.printf("%sProbability distribution%s%n", ANSI_YELLOW, ANSI_RESET);
             for(int i = 0; i < queueTimeStatus.length; i++) {
                     System.out.printf("%d: %.04f %%%n", i, (queueTimeStatus[i]/endTime));
                 }
     
-            System.out.printf("%n%sTempos acumulados%s%n", ANSI_YELLOW, ANSI_RESET);
+            System.out.printf("%n%sTime weights%s%n", ANSI_YELLOW, ANSI_RESET);
             for(int i = 0; i < queueTimeStatus.length; i++) {
                     System.out.printf("%d: %.04f%n", i, queueTimeStatus[i]);
                 }
                 
-            System.out.printf("%n%sNúmero de perda de clientes%s%n", ANSI_YELLOW, ANSI_RESET);
+            System.out.printf("%n%sClients lost%s%n", ANSI_YELLOW, ANSI_RESET);
             System.out.printf("%d%n", lossCount);
     
             if (printEndTime) {
-                System.out.printf("%n%sTempo global da simulação%s%n", ANSI_YELLOW, ANSI_RESET);
+                System.out.printf("%n%sGlobal simulation time duration%s%n", ANSI_YELLOW, ANSI_RESET);
                 System.out.printf("%.04f%n%n", endTime);
             } else {
                 System.out.println();

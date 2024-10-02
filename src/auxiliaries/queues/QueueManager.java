@@ -55,7 +55,7 @@ public class QueueManager {
 
     private void printData() {
         for (int i = 1; i < queues.size(); i++) {
-            queues.get(i).getData().printInfo(String.format("Fila %d", i), globalTime, (i == queues.size()-1));
+            queues.get(i).getData().printInfo(String.format("Queue %d", i), globalTime, (i == queues.size()-1));
         }
     }
 
