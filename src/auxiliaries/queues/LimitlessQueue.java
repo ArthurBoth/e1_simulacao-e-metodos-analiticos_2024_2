@@ -37,8 +37,8 @@ public class LimitlessQueue extends QueueSimulation {
       }
 
     @Override
-    public DataWrapper getData() {
-        DataWrapper data = new DataWrapper();
+    public QueueDataWrapper getData() {
+        QueueDataWrapper data = new QueueDataWrapper();
         data.setQueueTime(timeStatus.stream().mapToDouble(Double::doubleValue).toArray());
         data.setLossCount(super.getLoss());
         return data;

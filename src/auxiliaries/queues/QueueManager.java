@@ -1,5 +1,7 @@
 package auxiliaries.queues;
 
+import auxiliaries.io.ConsoleLogger;
+
 import java.util.ArrayList;
 
 public class QueueManager {
@@ -27,7 +29,7 @@ public class QueueManager {
         queues.get(source).newLink(target, chance);
     }
 
-    public void run(double firstArrival) {
+    public void run(double firstArrival, boolean printData) {
         scheduler.firstArrival(firstArrival);
         while (!scheduler.stop()) {
             Event e = scheduler.next();
@@ -46,16 +48,27 @@ public class QueueManager {
             }
 
             if (scheduler.isEmpty()) {
-                System.out.println("EMERGENCY BREAK");
+                ConsoleLogger.logError("EMERGENCY BREAK");
                 break;
             }
         }
-        printData();
+        if (printData) {
+            printData();
+        }
+        else {
+            writeData();
+        }
     }
 
     private void printData() {
         for (int i = 1; i < queues.size(); i++) {
             queues.get(i).getData().printInfo(String.format("Queue %d", i), globalTime, (i == queues.size()-1));
+        }
+    }
+    
+    private void writeData() {
+        for (int i = 1; i < queues.size(); i++) {
+            queues.get(i).getData().writeInfo(String.format("Queue %d", i), globalTime, (i == queues.size()-1));
         }
     }
 

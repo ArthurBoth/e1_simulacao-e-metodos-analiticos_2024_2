@@ -78,8 +78,8 @@ public class QueueSimulation {
         return event;
     }
 
-    public DataWrapper getData() {
-        DataWrapper data = new DataWrapper();
+    public QueueDataWrapper getData() {
+        QueueDataWrapper data = new QueueDataWrapper();
         data.setQueueTime(timeStatus);
         data.setLossCount(lossCount);
         return data;
