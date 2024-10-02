@@ -55,20 +55,11 @@ public class QueueManager {
         if (printData) {
             printData();
         }
-        else {
-            writeData();
-        }
     }
 
     private void printData() {
         for (int i = 1; i < queues.size(); i++) {
             queues.get(i).getData().printInfo(String.format("Queue %d", i), globalTime, (i == queues.size()-1));
-        }
-    }
-    
-    private void writeData() {
-        for (int i = 1; i < queues.size(); i++) {
-            queues.get(i).getData().writeInfo(String.format("Queue %d", i), globalTime, (i == queues.size()-1));
         }
     }
 
@@ -154,7 +145,8 @@ public class QueueManager {
     }
 
     private void switchQueues(Event e) {
-        QueueSimulation q1, q2;
+        QueueSimulation q1;
+        QueueSimulation q2;
         Event event;
 
         int index1 = e.fromQueue();

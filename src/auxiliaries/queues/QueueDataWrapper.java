@@ -1,7 +1,6 @@
 package auxiliaries.queues;
 
 import auxiliaries.io.ConsoleLogger;
-import auxiliaries.io.FileIO;
 
 public class QueueDataWrapper {
     
@@ -46,38 +45,8 @@ public class QueueDataWrapper {
                 ConsoleLogger.logYellow("Total simulation time");
                 ConsoleLogger.logWhite(String.format("%.04f%n%n", endTime));
             } else {
-                System.out.println();
+                ConsoleLogger.logWhite("");
             }
-        }
-    }
-
-    public void writeInfo(String header, double endTime, boolean writeEndTime) {
-        StringBuilder builder;
-        if (validNumbers(endTime)) {
-            builder = new StringBuilder(String.format("%s%n", header));
-            
-            builder.append(String.format("Probability distribution%n"));
-            for(int i = 0; i < queueTimeStatus.length; i++) {
-                builder.append(String.format("%d: %.04f %%%n", i, (queueTimeStatus[i]/endTime)));
-            }
-    
-            builder.append(String.format("Grupped times%n"));
-            for(int i = 0; i < queueTimeStatus.length; i++) {
-                builder.append(String.format("%d: %.04f%n", i, queueTimeStatus[i]));
-            }
-            
-            builder.append(String.format("Clients lost%n"));
-            builder.append(String.format("%d%n", lossCount));
-
-            if (writeEndTime) {
-                builder.append(String.format("Total simulation time%n"));
-                builder.append(String.format("%.04f%n%n", endTime));
-            }
-            else {
-                builder.append(System.lineSeparator());
-            }
-
-            FileIO.writeLine("_Output File_.txt", builder.toString());
         }
     }
     
