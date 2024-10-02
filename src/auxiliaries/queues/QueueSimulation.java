@@ -86,7 +86,6 @@ public class QueueSimulation {
     }
 
     public void newLink(int index, double chance) {
-        System.out.println(index + "\n");
         /* Para considerar o input como uma porcentagem absoluta,
            então somar às chances que já existem pra processamento */
         if (links.size() > 0) {

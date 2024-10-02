@@ -14,7 +14,6 @@ public class RNG {
     public static final double INCREMENT    = 14423.2563217511;  
     public static final double MODULE       = 16651.8647227172;  
     
-    private double[] seeds;
     private double previous;
     private int stopCount;
     private long iteration;
@@ -23,10 +22,6 @@ public class RNG {
         previous  = 0;
         stopCount = 0;
         iteration = 0;
-    }
-
-    public void setSeeds(double[] seeds) {
-        this.seeds = seeds;
     }
 
     public double nextRandom() {
@@ -51,6 +46,6 @@ public class RNG {
     }
 
     public boolean stop() {
-        return (iteration >= (stopCount * seeds.length));
+        return (iteration >= stopCount);
     }
 }
