@@ -3,12 +3,12 @@ package auxiliaries.queues;
 import auxiliaries.io.ConsoleLogger;
 import auxiliaries.io.FileIO;
 
-public class DataWrapper {
+public class QueueDataWrapper {
     
     private double[] queueTimeStatus; // Sum of how long the queue had [index] clients 
     private int lossCount;            // how many clients were lost due to not having queue space left
 
-    public DataWrapper() {
+    public QueueDataWrapper() {
         lossCount        = -1;
         queueTimeStatus  = null;
     }

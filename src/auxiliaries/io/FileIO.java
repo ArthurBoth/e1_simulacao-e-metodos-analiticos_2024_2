@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import auxiliaries.fileData.FileDataWrapper;
+
 public class FileIO {
     private class StringConstants {
         public static final String ERROR_MSG    = "An error occurred. ";
@@ -17,17 +19,45 @@ public class FileIO {
         }
     }
 
-    public static String read(String path) {
+    public static FileDataWrapper read(String path) {
+        /*
+    public String content;
+    public int arrivalsIndex;
+    public int queuesIndex;
+    public int networksIndex;
+    public int rndnumbersIndex;
+    public int numbersPerSeedIndex;
+    public int seedsIndex;
+         */
+        FileDataWrapper returnValue;
+        int index = 0;
+        int[] indexes = {-1, -1, -1, -1, -1, -1};
         StringBuilder content = new StringBuilder();
 
         try {
             FileReader fileReader = new FileReader(path);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            String line;
+            String line = "Not null";
+
+            // Skip comment headers
+            while ((line.charAt(0) != '!') && ((line) != null)) {
+                line = bufferedReader.readLine();
+            }
 
             while ((line = bufferedReader.readLine()) != null) {
+                line = line.replaceAll("\\s", "");
+                index++;
                 content.append(line);
                 content.append(System.lineSeparator());
+
+                switch (line) {
+                    case "arrivals:"          -> {indexes[0] = index;}
+                    case "queues:"            -> {indexes[1] = index;}
+                    case "network:"           -> {indexes[2] = index;}
+                    case "rndnumbers:"        -> {indexes[3] = index;}
+                    case "rndnumbersPerSeed:" -> {indexes[4] = index;}
+                    case "seeds:"             -> {indexes[5] = index;}
+                }
             }
 
             bufferedReader.close();
@@ -38,10 +68,14 @@ public class FileIO {
         }
         if ((content.length() == 0)) {
             ConsoleLogger.logGreen(StringConstants.EMPTY_FILE);
-            return "";
+            return null;
         }
 
-        return content.toString();
+        returnValue = new FileDataWrapper(
+                        content.toString(), indexes[0], indexes[1], indexes[2], 
+                        indexes[3], indexes[4], indexes[5]);
+
+        return returnValue;
     }
 
     public static void writeLine(String path, String line) {
