@@ -6,6 +6,7 @@ public class ConsoleLogger {
         private static final String RED    = "\u001B[31m";
         private static final String GREEN  = "\u001B[32m";
         private static final String YELLOW = "\u001B[33m";
+        private static final String BLUE   = "\u001B[34m";
 
         private Colours() {
             throw new IllegalStateException("Utility class");
@@ -20,6 +21,12 @@ public class ConsoleLogger {
 
     public static void logYellow(String message) {
         System.out.print(Colours.YELLOW);
+        System.out.print(message);
+        System.out.println(Colours.RESET);
+    }
+
+    public static void logBlue(String message) {
+        System.out.print(Colours.BLUE);
         System.out.print(message);
         System.out.println(Colours.RESET);
     }

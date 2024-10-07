@@ -13,7 +13,7 @@ public class RNG {
     public static final int MULTIPLIER      = 157907;            
     public static final double INCREMENT    = 14423.2563217511;  
     public static final double MODULE       = 16651.8647227172;  
-
+    
     private double previous;
     private int stopCount;
     private long iteration;

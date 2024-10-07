@@ -82,6 +82,8 @@ public class QueueSimulation {
         QueueDataWrapper data = new QueueDataWrapper();
         data.setQueueTime(timeStatus);
         data.setLossCount(lossCount);
+        data.setMinService(MIN_SERVICE);
+        data.setMaxService(MAX_SERVICE);
         return data;
     }
 
